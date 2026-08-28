@@ -54,5 +54,16 @@ The tests run against a real Basic Memory instance — no mocks — and cover
 authentication, namespace lifecycle, store/recall, update-without-duplication,
 deletion, cross-namespace isolation and untrusted identifiers.
 
-Deployment for the non-production test endpoint is defined by `railway.json` at
-the repository root.
+## Deployment
+
+The non-production test endpoint builds from the repository's root `Dockerfile`,
+which Railway detects on its own. Two service settings make that image serve the
+adapter instead of the image's default MCP server:
+
+- **Start command:** `PYTHONPATH=/app/integrations/verging-memory-ci python -m verging_memory_ci_adapter`
+- **Health check path:** `/v1/health`
+
+These live in the service's settings rather than a committed `railway.json`:
+Railway has deprecated config-as-code, and its replacement (`.railway/railway.ts`)
+requires the Railway TypeScript SDK, which does not belong in this Python
+repository.

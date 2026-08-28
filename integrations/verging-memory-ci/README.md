@@ -48,9 +48,22 @@ CI report commit can never capture namespace content.
 
 ## Deployment
 
-`railway.json` at the repository root builds the existing root `Dockerfile` and
-overrides the start command to run this adapter, with `/v1/health` as the
-Railway healthcheck. Pushing the branch deploys it.
+The adapter runs on the repository's non-production Railway service, built from
+the existing root `Dockerfile`. Railway's file-based config-as-code
+(`railway.json` / `railway.toml`) is deprecated and rejected by the API, and the
+replacement (`.railway/railway.ts`) can only be applied from a linked project,
+so the service instance carries the two settings that differ from the image
+default:
+
+| Setting | Value |
+| --- | --- |
+| `dockerfilePath` | `Dockerfile` |
+| `startCommand` | `python /app/integrations/verging-memory-ci/adapter.py` |
+| `healthcheckPath` | `/v1/health` |
+
+`VERGING_PRODUCT_KEY` is stored as a service variable. The image's default
+command still starts the Basic Memory MCP server, so nothing about the product
+container changes; only this service overrides the entrypoint.
 
 ## Tests
 

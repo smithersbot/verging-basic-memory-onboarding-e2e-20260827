@@ -1,0 +1,32 @@
+name: Verging Memory CI
+on:
+  push:
+    branches: [main, staging/onboarding-e2e]
+  workflow_dispatch:
+    inputs:
+      fetch_only_release_id:
+        description: "Fetch an existing release's report instead of submitting"
+        required: false
+        default: ""
+permissions:
+  contents: write
+  checks: write
+  pull-requests: write
+concurrency:
+  group: verging-memory-ci-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  memory-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: "Verging Memory CI"
+          sparse-checkout-cone-mode: true
+      - uses: verginglabs/memory-ci-action@a6c4e6f7d5541f474c7d2560f10cbdbf2580b306
+        with:
+          api_key: ${{ secrets.VERGING_API_KEY }}
+          api_base: https://ci-staging.verginglabs.com
+          wiring_check: "true"
+          product_name: "Basic Memory"
+          fetch_only_release_id: ${{ inputs.fetch_only_release_id }}

@@ -44,6 +44,10 @@ test-sqlite: test-unit-sqlite test-int-sqlite
 # Run all tests against Postgres (uses testcontainers)
 test-postgres: test-unit-postgres test-int-postgres
 
+# Run the Verging Memory CI adapter contract tests (real Basic Memory, no mocks)
+test-adapter:
+    uv run pytest -v --no-cov test-adapter
+
 # Run unit tests against SQLite
 test-unit-sqlite:
     BASIC_MEMORY_ENV=test uv run pytest -p pytest_mock -v --no-cov {{PYTEST_FLAGS}} tests

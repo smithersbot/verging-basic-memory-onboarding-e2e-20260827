@@ -1,0 +1,11 @@
+{
+  "release_id": "run_20260828_52f3dafa1354",
+  "vendor_version": "82d9c8e",
+  "scope": {
+    "suites": [
+      "onboarding",
+      "preference-adherence"
+    ]
+  },
+  "corrections_due_by": null
+}

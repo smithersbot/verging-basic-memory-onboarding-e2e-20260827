@@ -1,0 +1,11 @@
+{
+  "release_id": "run_20260828_adf24362e499",
+  "vendor_version": "f280cec",
+  "scope": {
+    "suites": [
+      "onboarding",
+      "preference-adherence"
+    ]
+  },
+  "corrections_due_by": null
+}

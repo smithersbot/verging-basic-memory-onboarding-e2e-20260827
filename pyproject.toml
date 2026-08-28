@@ -86,10 +86,11 @@ requires = ["hatchling", "uv-dynamic-versioning>=0.7.0"]
 build-backend = "hatchling.build"
 
 [tool.pytest.ini_options]
-pythonpath = ["src", "tests"]
+# "." puts the root-level verging_adapter package on the path for test-adapter/.
+pythonpath = ["src", "tests", "."]
 addopts = "--cov=basic_memory --cov-report term-missing"
 # plugins/ carries the co-located uv hook-script tests (one per script).
-testpaths = ["tests", "test-int", "plugins"]
+testpaths = ["tests", "test-int", "plugins", "test-adapter"]
 asyncio_mode = "strict"
 asyncio_default_fixture_loop_scope = "function"
 # Any test hanging >120s fails with a stack dump instead of stalling the CI job

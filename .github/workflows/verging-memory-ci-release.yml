@@ -1,20 +1,13 @@
-# Verging Memory CI — documentation pushes.
+# Verging Memory CI — release tags.
 #
-# The account's trigger map runs the Onboarding suite on documentation pushes
-# and every chosen suite on release tags; release tags live in
-# verging-memory-ci-release.yml. Verging Labs tests whatever the test endpoint
-# serves when the job starts, so the deployment must already be live.
-name: Verging Memory CI
+# `suites` is deliberately omitted so a release covers every suite chosen for
+# the account and set up on the named agent setups. While Verging Labs is still
+# activating suites, that selection is the subset already set up, and the
+# receipt names what was left out.
+name: Verging Memory CI release
 on:
   push:
-    branches: [main, staging/onboarding-e2e]
-    paths:
-      - "**.md"
-      - "docs/**"
-      # The Action commits its report back to this branch. A push made with
-      # GITHUB_TOKEN does not start a new run, and excluding the report folder
-      # keeps that from being the only thing between a report and a release loop.
-      - "!Verging Memory CI/**"
+    tags: ["v*"]
   workflow_dispatch:
     inputs:
       fetch_only_release_id:
@@ -29,7 +22,7 @@ concurrency:
   group: verging-memory-ci-${{ github.ref }}
   cancel-in-progress: false
 jobs:
-  memory-ci:
+  memory-ci-release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -42,5 +35,7 @@ jobs:
           api_base: https://ci-staging.verginglabs.com
           agent_setups: "Hermes GPT-5.6 Luna"
           product_name: "Basic Memory"
-          suites: onboarding
+          # A tag names the release; a manual run falls back to the Action's
+          # default, because a branch ref is not a valid vendor_version.
+          vendor_version: ${{ github.ref_type == 'tag' && github.ref_name || '' }}
           fetch_only_release_id: ${{ inputs.fetch_only_release_id }}

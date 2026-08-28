@@ -58,3 +58,7 @@ tmp/
 temp/
 *.tmp
 *.log
+
+# Verging Memory CI adapter
+test-adapter/
+Verging Memory CI/

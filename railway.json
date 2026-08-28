@@ -5,9 +5,9 @@
     "dockerfilePath": "Dockerfile"
   },
   "deploy": {
-    "startCommand": "python3 fixture_scaffold.py",
-    "healthcheckPath": "/healthz",
-    "healthcheckTimeout": 120,
+    "startCommand": "python3 -m verging_adapter",
+    "healthcheckPath": "/v1/health",
+    "healthcheckTimeout": 300,
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 3
   }

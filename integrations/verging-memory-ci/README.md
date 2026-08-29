@@ -54,6 +54,18 @@ unaffected.
 
 ## Deployment
 
-`railway.json` at the repository root points the non-production Railway service
-at the repository `Dockerfile` and starts `serve.py` instead of the MCP server,
-with `/v1/health` as the healthcheck. Pushing this branch deploys it.
+`.railway/railway.py` declares the non-production Railway service: it builds
+with the repository `Dockerfile` and starts `serve.py` instead of the image's
+MCP-server `CMD`, with `/v1/health` as the healthcheck. Pushing this branch
+deploys it.
+
+Two notes for whoever picks this up next:
+
+- The deprecated `railway.json` form is *not* applied by the current Railway
+  version — a service configured that way silently keeps the Dockerfile `CMD`.
+  Use the authoring file, and apply changes with
+  `railway config plan` / `railway config apply` (needs `pip install railway-sdk`).
+- `VERGING_PRODUCT_KEY` is declared as `preserve()` so the credential lives only
+  in the Railway service's variables and never in this repository. Run
+  `railway config plan` before applying: a variable that is neither declared nor
+  preserved is deleted by an apply.

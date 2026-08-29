@@ -169,6 +169,19 @@ async def test_store_then_recall_returns_the_note(client):
     assert results[0]["metadata"]["source"] == "handbook"
 
 
+async def test_recall_returns_the_stored_body_without_frontmatter(client):
+    """`content` must round-trip what `store` was given, not the raw file."""
+    namespace = await make_namespace(client, "round-trip")
+    body = "The pager rotation hands over at 09:00 UTC on Mondays."
+    await store(client, namespace, body, title="Pager Rotation", metadata={"team": "platform"})
+
+    result = (await recall(client, namespace, "pager rotation"))[0]
+    assert result["content"].strip() == body
+    assert "---" not in result["content"]
+    # The frontmatter is not lost, it just belongs in the metadata field.
+    assert result["metadata"]["team"] == "platform"
+
+
 async def test_recall_respects_limit(client):
     namespace = await make_namespace(client, "recall-limit")
     for index in range(4):

@@ -34,6 +34,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated, Any, AsyncIterator, Final
 
+import frontmatter
 import httpx
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
@@ -186,6 +187,22 @@ def validated_id(value: str) -> str:
         return str(uuid.UUID(value))
     except ValueError:
         raise HTTPException(status_code=404, detail="not found") from None
+
+
+def note_body(content: str | None) -> str:
+    """Return a note's markdown body without its YAML frontmatter.
+
+    Basic Memory stores frontmatter (title, type, permalink, plus whatever
+    metadata was supplied) at the top of the file, so the raw content of a
+    stored note is not what `store` was given. Verging carries that metadata in
+    the result's own `metadata` field, so repeating it inside `content` would
+    both break the store/recall round trip and pad every recall result with the
+    same boilerplate. Parsed with the product's own frontmatter library so the
+    two agree on where the body starts.
+    """
+    if not content:
+        return ""
+    return frontmatter.loads(content).content
 
 
 def note_title(requested: str | None) -> str:
@@ -513,7 +530,7 @@ def create_app() -> FastAPI:
             results.append(
                 {
                     "id": note["external_id"],
-                    "content": note.get("content") or "",
+                    "content": note_body(note.get("content")),
                     "metadata": note.get("entity_metadata"),
                 }
             )

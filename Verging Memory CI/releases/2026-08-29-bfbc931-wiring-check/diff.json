@@ -1,0 +1,16 @@
+{
+  "format": "wiring-check/v1",
+  "stage": "wiring",
+  "wiring_check": true,
+  "product": "Basic Memory",
+  "release_id": "run_20260829_6b2f9493a4c1",
+  "date": "2026-08-29",
+  "verified": {
+    "key_authenticated": true,
+    "report_route": "/v1/releases/run_20260829_6b2f9493a4c1/report"
+  },
+  "billing": {
+    "billable": false,
+    "reason": "wiring check: free, never billed"
+  }
+}

@@ -1,7 +1,9 @@
 name: Verging Memory CI
 on:
-  push:
-    branches: [verging-wiring-check-20260829-bf337f]
+  # Phase 1 (the wiring check) is complete and its report is committed. Pushes
+  # no longer trigger this workflow, so phase-2 work cannot run a second wiring
+  # check or commit a second wiring report. Verging Labs and Basic Memory agree
+  # the permanent trigger before this becomes automatic again.
   workflow_dispatch:
     inputs:
       fetch_only_release_id:

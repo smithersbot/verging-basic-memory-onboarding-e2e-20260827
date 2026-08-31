@@ -1,7 +1,7 @@
 name: Verging Memory CI
 on:
-  push:
-    branches: [verging-wiring-check-20260831-032952-13102]
+  # Manual only during onboarding: the wiring check is already proven, and a
+  # push trigger would run another one on every product-integration commit.
   workflow_dispatch:
     inputs:
       fetch_only_release_id:

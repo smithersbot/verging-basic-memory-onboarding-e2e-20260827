@@ -78,7 +78,15 @@ cd integrations/verging && uv run pytest
 
 ## Deployment
 
-The repository root `railway.json` points the non-production Railway test service
-at this adapter: it builds the repository `Dockerfile` and starts
-`integrations.verging.app:app` with `/v1/health` as the healthcheck. That service
-exists only to host this test deployment for Verging Memory CI.
+The repository root `railway.json` declares how the non-production Railway test
+service runs this adapter: build the repository `Dockerfile`, start
+`integrations.verging.app:app`, and use `/v1/health` as the healthcheck. That
+service exists only to host this test deployment for Verging Memory CI.
+
+The same start command and healthcheck are also set on the Railway service
+itself, and those settings are what actually take effect: a `railway up` deploy
+builds the root `Dockerfile` but keeps the image's own `CMD` (Basic Memory's MCP
+server) unless the service overrides it, and Railway's replacement for
+config-as-code needs a `railway` SDK package this repository does not carry. The
+two are kept identical — treat `railway.json` as the declaration and the service
+settings as the mechanism.

@@ -221,6 +221,18 @@ def test_store_writes_a_real_note_that_recall_finds(client: TestClient) -> None:
     assert on_disk
 
 
+def test_recall_returns_the_stored_content_verbatim(client: TestClient) -> None:
+    """Basic Memory's frontmatter belongs in metadata, not in the recalled content."""
+    namespace_id = create_namespace(client, "round-trip")
+    content = "Quarterly review moved to the first Tuesday.\n\nAsk Dana for the agenda."
+    memory_id = store(client, namespace_id, content=content, title="Quarterly review")
+
+    results = recall(client, namespace_id, "quarterly review agenda")
+    assert [result["id"] for result in results] == [memory_id]
+    assert results[0]["content"] == content
+    assert results[0]["metadata"]["title"] == "Quarterly review"
+
+
 def test_recall_honors_limit(client: TestClient) -> None:
     namespace_id = create_namespace(client, "recall-limit")
     for index in range(3):

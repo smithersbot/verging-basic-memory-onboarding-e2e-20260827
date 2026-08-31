@@ -26,6 +26,7 @@ from contextlib import asynccontextmanager
 from pathlib import PurePosixPath
 from typing import Annotated, Any, AsyncIterator
 
+import frontmatter
 from fastapi import Depends, FastAPI, Header, HTTPException, Path, Request, status
 from fastapi.responses import JSONResponse
 from fastmcp.exceptions import ToolError
@@ -370,7 +371,7 @@ async def recall_memory(
         results.append(
             {
                 "id": entity.external_id,
-                "content": entity.content or "",
+                "content": _note_body(entity.content),
                 "metadata": entity.entity_metadata or {},
             }
         )
@@ -402,6 +403,19 @@ async def _read_entity(client: AsyncClient, *, project_id: str, entity_id: str) 
             status_code=status.HTTP_502_BAD_GATEWAY, detail="basic_memory_request_failed"
         )
     return EntityResponseV2.model_validate(response.json())
+
+
+def _note_body(content: str | None) -> str:
+    """Return what the caller stored, without Basic Memory's frontmatter block.
+
+    A note's file content carries the YAML frontmatter Basic Memory maintains
+    (title, type, permalink, and any metadata the caller passed). Recall reports
+    that separately as ``metadata``, so the body alone is what makes a stored
+    memory round-trip through store -> recall unchanged.
+    """
+    if not content:
+        return ""
+    return frontmatter.loads(content).content
 
 
 def _entity_id(external_id: str | None) -> str:

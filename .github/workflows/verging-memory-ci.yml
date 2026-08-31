@@ -1,7 +1,5 @@
 name: Verging Memory CI
 on:
-  push:
-    branches: [verging-wiring-check-20260831-044723-4d589]
   workflow_dispatch:
     inputs:
       fetch_only_release_id:

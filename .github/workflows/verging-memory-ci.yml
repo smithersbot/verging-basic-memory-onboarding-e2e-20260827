@@ -8,6 +8,12 @@ on:
         description: "Fetch an existing release's report instead of submitting"
         required: false
         default: ""
+  # Throwaway branch only: one live pull-request-context run to prove the
+  # Action's pull request comment renders. Never merged; the branch is deleted
+  # after the proof.
+  pull_request:
+    branches:
+      - verging-wiring-check-20260831-032952-13102
 permissions:
   contents: write
   checks: write

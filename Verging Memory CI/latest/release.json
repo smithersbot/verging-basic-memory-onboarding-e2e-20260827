@@ -1,0 +1,12 @@
+{
+  "release_id": "run_20260901_liveproof",
+  "vendor_version": "rendering-proof",
+  "scope": {
+    "suites": [
+      "onboarding",
+      "core-recall",
+      "preference-adherence"
+    ]
+  },
+  "corrections_due_by": "2026-09-04"
+}

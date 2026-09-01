@@ -1,0 +1,8 @@
+{
+  "format": "release-diff/v1",
+  "verdict": "pass",
+  "cost_verdict": "pass",
+  "release_verdict": "ready",
+  "stage": "preliminary",
+  "note": "rendering-proof fixture; nothing was tested"
+}
